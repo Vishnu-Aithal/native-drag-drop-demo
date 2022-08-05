@@ -1,12 +1,14 @@
 import { forwardRef, useRef } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { COLORS } from "../../Constants/Colors";
 import { Profile } from "../../Models/Profile";
 
 interface Props {
     profile: Profile;
 }
-
+const fadeIn = keyframes`
+    0%{opacity:0} 100%{opacity:1} 
+`;
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
@@ -15,6 +17,9 @@ const Wrapper = styled.div`
     border-radius: 0.25rem;
     cursor: grab;
     box-shadow: 0 2px 3px ${COLORS.border};
+    animation-name: ${fadeIn};
+    animation-duration: 0.2s;
+    animation-fill-mode: backwards;
     &:active {
         cursor: grabbing;
     }
@@ -49,8 +54,8 @@ const ProfileTitle = styled.p`
 `;
 const ProfileInterests = styled.p`
     font-size: small;
-    color: ${COLORS.textBlack};
-
+    color: ${COLORS.textGray};
+    font-weight: 500;
     @media only screen and (max-width: 992px) {
         display: none;
     }

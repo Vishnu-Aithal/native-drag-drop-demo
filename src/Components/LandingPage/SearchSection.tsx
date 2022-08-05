@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { COLORS } from "../../Constants/Colors";
 import { useDebounce } from "../../Hooks/useDebounce";
+import { useFocusOnMount } from "../../Hooks/useFocusOnMount";
 import { useInterSectionObserver } from "../../Hooks/useIntersectionObserver";
 import { Profile } from "../../Models/Profile";
 import { filterUsersBySearch } from "../../Utils/filterUsersBySearch";
@@ -30,14 +31,17 @@ export const SearchSection: React.FC<Props> = ({
     const [displayLength, setDisplayLength] = useState(10);
     const rootRef = useRef<HTMLUListElement>(null);
     const targetRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
     const onScrollEnd: IntersectionObserverCallback = (entries) => {
         if (entries[0].isIntersecting) {
             setDisplayLength((prev) => prev + 10);
         }
     };
     const handleSearch = useCallback(() => {
-        if (search === "") {
+        if (search.trim() === "") {
             setFilteredUsers([]);
+            setDisplayLength(10);
+
             setNoResults(false);
             return;
         }
@@ -53,13 +57,14 @@ export const SearchSection: React.FC<Props> = ({
 
     useInterSectionObserver(rootRef, targetRef, onScrollEnd);
     useDebounce(search, handleSearch, 500);
-
+    useFocusOnMount(inputRef);
     const usersToDisplay = filteredUsers
         .filter((user) => !selectedUserNames.includes(user.username))
         .slice(0, displayLength);
     return (
         <Section>
             <SearchBar
+                ref={inputRef}
                 placeholder="Search for name, username, title or interests..."
                 type="search"
                 value={search}

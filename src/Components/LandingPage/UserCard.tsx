@@ -1,14 +1,13 @@
 import { forwardRef, useRef } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { COLORS } from "../../Constants/Colors";
 import { Profile } from "../../Models/Profile";
+import { fadeIn } from "../../Utils/css-helpers/animations";
 
 interface Props {
     profile: Profile;
 }
-const fadeIn = keyframes`
-    0%{opacity:0} 100%{opacity:1} 
-`;
+
 const Wrapper = styled.div`
     display: flex;
     align-items: center;

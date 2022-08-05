@@ -5,6 +5,7 @@ import { useDebounce } from "../../Hooks/useDebounce";
 import { useFocusOnMount } from "../../Hooks/useFocusOnMount";
 import { useInterSectionObserver } from "../../Hooks/useIntersectionObserver";
 import { Profile } from "../../Models/Profile";
+import { fadeIn } from "../../Utils/css-helpers/animations";
 import { filterUsersBySearch } from "../../Utils/filterUsersBySearch";
 import { List } from "./List-sc";
 import { SearchBar } from "./SearchBar-sc";
@@ -14,6 +15,9 @@ import { UserCard } from "./UserCard";
 const EmptyText = styled.p`
     text-align: center;
     color: ${COLORS.textGray};
+    animation-name: ${fadeIn};
+    animation-duration: 0.2s;
+    animation-fill-mode: backwards;
 `;
 
 interface Props {
@@ -41,7 +45,6 @@ export const SearchSection: React.FC<Props> = ({
         if (search.trim() === "") {
             setFilteredUsers([]);
             setDisplayLength(10);
-
             setNoResults(false);
             return;
         }
@@ -71,9 +74,16 @@ export const SearchSection: React.FC<Props> = ({
                 onChange={(e) => setSearch(e.target.value)}
             />
             <List ref={rootRef}>
+                {search.trim() === "" &&
+                    filteredUsers.length === 0 &&
+                    !noResults && (
+                        <EmptyText>
+                            Start searching to view profiles here...
+                        </EmptyText>
+                    )}
                 {noResults && (
                     <EmptyText>
-                        Could not find any users matching your query...
+                        Could not find any profiles matching your query...
                     </EmptyText>
                 )}
 
